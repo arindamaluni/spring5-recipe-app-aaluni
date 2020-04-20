@@ -1,4 +1,4 @@
-package com.aaluni.spring5recipeapp;
+package com.aaluni.spring5recipeapp.domain;
 
 import java.math.BigDecimal;
 
