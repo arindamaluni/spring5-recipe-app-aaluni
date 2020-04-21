@@ -20,8 +20,7 @@ public class RecipeServiceImpl implements RecipeService{
 		// TODO Auto-generated method stub
 		Set<Recipe> recipies = new HashSet<>();
 		recipeRepository.findAll().iterator().forEachRemaining(recipies::add);
-		return recipies;
-		
+		return recipies;		
 	}
 
 }
