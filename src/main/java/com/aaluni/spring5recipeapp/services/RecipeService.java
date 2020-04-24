@@ -6,4 +6,5 @@ import com.aaluni.spring5recipeapp.domain.Recipe;
 
 public interface RecipeService {
 		Set<Recipe> getRecipes();	
+		Recipe findById(Long l);
 }
