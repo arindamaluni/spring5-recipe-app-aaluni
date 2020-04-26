@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.aaluni.spring5recipeapp.commands.RecipeCommand;
 import com.aaluni.spring5recipeapp.services.RecipeService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class RecipeController {
 
@@ -41,6 +44,13 @@ public class RecipeController {
     public String updateRecipe(@PathVariable String id, Model model){
         model.addAttribute("recipe", recipeService.findRecipeCommandById(Long.valueOf(id)));
         return "recipe/recipeform";
+    }
+    
+    @RequestMapping("/recipe/{id}/delete")
+    public String deleteRecipe(@PathVariable String id, Model model){
+    	log.debug("Deleting Recipe: {}", id);
+        recipeService.deleteById(Long.valueOf(id));
+        return "redirect:/";
     }
     
     
