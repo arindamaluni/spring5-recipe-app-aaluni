@@ -59,6 +59,7 @@ public class RecipeControllerTest {
     @Test
     public void testNewRecipe() throws Exception{
     	mockMvc.perform(get("/recipe/new"))
+    		.andExpect(model().attributeExists("recipe"))
     		.andExpect(model().attribute("recipe", isA(RecipeCommand.class)))
     		.andExpect(status().isOk())
     		.andExpect(view().name("recipe/recipeform"));
@@ -94,7 +95,7 @@ public class RecipeControllerTest {
     }
     @Test
     public void testDeleteAction() throws Exception {
-    	mockMvc.perform(get("/recipe/1/update"))
+    	mockMvc.perform(get("/recipe/1/delete"))
     		.andExpect(status().is3xxRedirection())
     		.andExpect(view().name("redirect:/"));
     		
