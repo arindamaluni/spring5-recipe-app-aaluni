@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aaluni.spring5recipeapp.commands.IngredientCommand;
@@ -11,6 +12,7 @@ import com.aaluni.spring5recipeapp.converters.IngredientCommandToIngredient;
 import com.aaluni.spring5recipeapp.converters.IngredientToIngredientCommand;
 import com.aaluni.spring5recipeapp.domain.Ingredient;
 import com.aaluni.spring5recipeapp.domain.Recipe;
+import com.aaluni.spring5recipeapp.repositories.IngredientRepository;
 import com.aaluni.spring5recipeapp.repositories.RecipeRepository;
 import com.aaluni.spring5recipeapp.repositories.UnitOfMeasureRepository;
 
@@ -23,6 +25,8 @@ public class IngredientServiceImpl implements IngredientsService {
 	private final IngredientToIngredientCommand ingredientToIngredientCommand;
 	private final IngredientCommandToIngredient ingredientCommandToIngredient;
 	private final UnitOfMeasureRepository uomRepository;
+	@Autowired
+	private IngredientRepository ingredientRepo;
 
 	
 	public IngredientServiceImpl(IngredientToIngredientCommand ingredientToIngredientCommand, 
@@ -108,7 +112,7 @@ public class IngredientServiceImpl implements IngredientsService {
 		
 		return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
 	}
-	
+	@Transactional
     @Override
     public void deleteById(Long recipeId, Long idToDelete) {
 
@@ -129,9 +133,11 @@ public class IngredientServiceImpl implements IngredientsService {
             if(ingredientOptional.isPresent()){
                 log.debug("found Ingredient");
                 Ingredient ingredientToDelete = ingredientOptional.get();
-                ingredientToDelete.setRecipe(null);
+                //ingredientToDelete.setRecipe(null);
                 recipe.getIngredients().remove(ingredientOptional.get());
+                ingredientRepo.delete(ingredientToDelete);
                 recipeRepository.save(recipe);
+
             }
         } else {
             log.debug("Recipe Id Not found. Id:" + recipeId);
