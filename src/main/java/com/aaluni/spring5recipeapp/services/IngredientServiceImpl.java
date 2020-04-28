@@ -23,6 +23,7 @@ public class IngredientServiceImpl implements IngredientsService {
 	private final IngredientToIngredientCommand ingredientToIngredientCommand;
 	private final IngredientCommandToIngredient ingredientCommandToIngredient;
 	private final UnitOfMeasureRepository uomRepository;
+
 	
 	public IngredientServiceImpl(IngredientToIngredientCommand ingredientToIngredientCommand, 
 			IngredientCommandToIngredient ingredientCommandToIngredient,
@@ -107,5 +108,34 @@ public class IngredientServiceImpl implements IngredientsService {
 		
 		return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
 	}
+	
+    @Override
+    public void deleteById(Long recipeId, Long idToDelete) {
 
+        log.debug("Deleting ingredient: " + recipeId + ":" + idToDelete);
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+
+        if(recipeOptional.isPresent()){
+            Recipe recipe = recipeOptional.get();
+            log.debug("found recipe");
+
+            Optional<Ingredient> ingredientOptional = recipe
+                    .getIngredients()
+                    .stream()
+                    .filter(ingredient -> ingredient.getId().equals(idToDelete))
+                    .findFirst();
+
+            if(ingredientOptional.isPresent()){
+                log.debug("found Ingredient");
+                Ingredient ingredientToDelete = ingredientOptional.get();
+                ingredientToDelete.setRecipe(null);
+                recipe.getIngredients().remove(ingredientOptional.get());
+                recipeRepository.save(recipe);
+            }
+        } else {
+            log.debug("Recipe Id Not found. Id:" + recipeId);
+        }
+    }
 }
+
