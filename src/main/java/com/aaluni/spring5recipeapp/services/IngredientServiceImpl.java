@@ -31,11 +31,13 @@ public class IngredientServiceImpl implements IngredientsService {
 	
 	public IngredientServiceImpl(IngredientToIngredientCommand ingredientToIngredientCommand, 
 			IngredientCommandToIngredient ingredientCommandToIngredient,
-			RecipeRepository recipeRepository, UnitOfMeasureRepository uomRepository) {
+			RecipeRepository recipeRepository, UnitOfMeasureRepository uomRepository,
+			IngredientRepository ingredientRepo) {
 		this.recipeRepository = recipeRepository;
 		this.ingredientToIngredientCommand = ingredientToIngredientCommand;
 		this.ingredientCommandToIngredient = ingredientCommandToIngredient;
 		this.uomRepository = uomRepository;
+		this.ingredientRepo = ingredientRepo;
 	}
 
 	

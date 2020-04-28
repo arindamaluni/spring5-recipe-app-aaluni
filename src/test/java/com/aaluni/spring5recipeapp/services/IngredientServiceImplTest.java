@@ -2,6 +2,7 @@ package com.aaluni.spring5recipeapp.services;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -12,6 +13,7 @@ import com.aaluni.spring5recipeapp.converters.UnitOfMeasureCommandToUnitOfMeasur
 import com.aaluni.spring5recipeapp.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.aaluni.spring5recipeapp.domain.Ingredient;
 import com.aaluni.spring5recipeapp.domain.Recipe;
+import com.aaluni.spring5recipeapp.repositories.IngredientRepository;
 import com.aaluni.spring5recipeapp.repositories.RecipeRepository;
 import com.aaluni.spring5recipeapp.repositories.UnitOfMeasureRepository;
 
@@ -30,6 +32,8 @@ public class IngredientServiceImplTest {
     RecipeRepository recipeRepository;
     IngredientCommandToIngredient ingredientCommandToIngredient;
     UnitOfMeasureRepository uomRepository;
+    @Mock
+    IngredientRepository ingredientRepository;
 
     IngredientsService ingredientService;
 
@@ -42,9 +46,9 @@ public class IngredientServiceImplTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-
+        
         ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, 
-        		ingredientCommandToIngredient, recipeRepository, uomRepository);
+        		ingredientCommandToIngredient, recipeRepository, uomRepository, ingredientRepository);
     }
 
     @Test
