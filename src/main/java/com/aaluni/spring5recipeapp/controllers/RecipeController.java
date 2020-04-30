@@ -1,15 +1,20 @@
 package com.aaluni.spring5recipeapp.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.aaluni.spring5recipeapp.commands.RecipeCommand;
+import com.aaluni.spring5recipeapp.exceptions.NotFoundException;
 import com.aaluni.spring5recipeapp.services.RecipeService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +58,14 @@ public class RecipeController {
     	log.debug("Deleting Recipe: {}", id);
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";
+    }
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView handleNotFound() {
+    	log.debug("Handling NotFoundException:");
+    	ModelAndView mv = new ModelAndView();
+    	mv.setViewName("404error");
+    	return mv;
     }
     
     
