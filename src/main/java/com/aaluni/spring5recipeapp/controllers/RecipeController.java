@@ -1,8 +1,11 @@
 package com.aaluni.spring5recipeapp.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -42,7 +45,12 @@ public class RecipeController {
     	return "recipe/recipeform";
     }
     @PostMapping(path = "/recipe")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand recipe) {
+    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand recipe, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+    		bindingResult.getAllErrors().forEach(err -> log.debug(err.toString()));
+    		return "recipe/recipeform";
+    	}
+    		
     	RecipeCommand savedRecipe = recipeService.saveRecipeCommand(recipe);
     	return "redirect:/recipe/" + savedRecipe.getId() + "/show";
     }
@@ -59,6 +67,7 @@ public class RecipeController {
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";
     }
+    
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public ModelAndView handleNotFound(Exception ex) {
@@ -69,8 +78,5 @@ public class RecipeController {
     	mv.addObject("exception", ex);
     	return mv;
     }
-    
-
-    
     
 }
